@@ -1,16 +1,14 @@
 import type { formInput } from '$lib/types/TriviaForm'
 
+// The client requests a Trivia.
+// Depending on whether the User's input is different than the default Trivia.
+// It will request a GET method or a POST method consisting of the user's input.
+
 export const getTrivia = async (params: formInput) => {
-	if (
-		params.questions === 10 &&
-		params.category === 'any' &&
-		params.difficulty === 'any' &&
-		params.question_type === 'any'
-	) {
+	if (params.category === 'any' && params.difficulty === 'any' && params.question_type === 'any') {
 		try {
 			const trivia = await fetch('api/trivia')
-			const res = await trivia.json()
-			return res
+			return await trivia.json()
 		} catch (error) {
 			console.error(error)
 		}
@@ -23,8 +21,7 @@ export const getTrivia = async (params: formInput) => {
 				},
 				body: JSON.stringify(params)
 			})
-			const res = await trivia.json()
-			return res
+			return await trivia.json()
 		} catch (error) {
 			console.error(error)
 		}

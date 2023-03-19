@@ -3,7 +3,7 @@
 	import TriviaForm from '../components/TriviaForm/TriviaForm.svelte'
 
 	let triviaState = false
-	let trivia: []
+	let trivia: { response_code: number; result: [] }
 </script>
 
 <main class="m-auto h-screen w-screen flex flex-col p-4 antialiased">
@@ -14,7 +14,7 @@
 			{#if triviaState}
 				<Trivia />
 			{:else}
-				<TriviaForm />
+				<TriviaForm {trivia} />
 			{/if}
 		</div>
 	</section>
