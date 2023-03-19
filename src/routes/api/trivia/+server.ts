@@ -10,11 +10,13 @@ export const GET = async () => {
 }
 
 export const POST = async ({ request }) => {
-	const body = await request.json()
-	console.log(body)
+	const { questions, category, difficulty, question_type } = await request.json()
+	console.log(questions, category, difficulty, question_type)
 
 	try {
-		const trivia = await fetch('https://opentdb.com/api.php?amount=10')
+		const trivia = await fetch(
+			`https://opentdb.com/api.php?amount=${questions}&category=${category}&difficulty=${difficulty}&type=${question_type}`
+		)
 		return json(await trivia.json())
 	} catch (error) {
 		return json(error)

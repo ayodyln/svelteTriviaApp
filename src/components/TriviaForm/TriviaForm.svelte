@@ -1,25 +1,62 @@
-<div>
+<script lang="ts">
+	import { getTrivia, requestTrivia } from '$lib/fetch/GetTrivia'
+
+	const formInput = {
+		// Default
+		questions: 10,
+		category: 'any',
+		difficulty: 'any',
+		question_type: 'any'
+	}
+
+	const FormHandler = async () => {
+		let data
+
+		console.log(formInput)
+
+		if (
+			formInput.questions === 10 &&
+			formInput.category === 'any' &&
+			formInput.difficulty === 'any' &&
+			formInput.question_type === 'any'
+		) {
+			data = await getTrivia()
+		} else {
+			data = await requestTrivia(formInput)
+		}
+
+		console.log(data)
+	}
+</script>
+
+<div class="h-full flex flex-col">
 	<!-- Trivia Fetch Input -->
 	<h2 class="text-2xl font-bold">Pick your Trivia</h2>
 	<div class="divider m-0" />
 
-	<form class="w-fit flex flex-col m-auto">
-		<section>
+	<form
+		class="w-fit h-full flex flex-col justify-between m-auto"
+		on:submit|preventDefault={FormHandler}>
+		<section class="">
 			<label for="questions" class="form-control w-full max-w-xs label flex-col items-start">
 				<span class="label-text">Amount of Questions</span>
 
 				<input
-					value="10"
 					type="number"
 					name="questions"
 					id="questions"
-					class="input input-bordered w-full" />
+					class="input input-bordered w-full"
+					bind:value={formInput.questions} />
 			</label>
 
-			<label class="form-control w-full max-w-xs label flex-col items-start">
+			<label for="categories" class="form-control w-full max-w-xs label flex-col items-start">
 				<span class="label-text">Category</span>
 
-				<select class="select select-bordered w-full ">
+				<select
+					bind:value={formInput.category}
+					id="categories"
+					name="categories"
+					class="select select-bordered w-full ">
 					<option value="any">Any Category</option>
 					<option value="9">General Knowledge</option>
 					<option value="10">Entertainment: Books</option>
@@ -48,10 +85,14 @@
 				</select>
 			</label>
 
-			<label class="form-control w-full max-w-xs label flex-col items-start">
+			<label for="difficulty" class="form-control w-full max-w-xs label flex-col items-start">
 				<span class="label-text">Difficulty</span>
 
-				<select class="select select-bordered w-full ">
+				<select
+					bind:value={formInput.difficulty}
+					id="difficulty"
+					name="difficutly"
+					class="select select-bordered w-full ">
 					<option value="any">Any Difficulty</option>
 					<option value="easy">Easy</option>
 					<option value="medium">Medium</option>
@@ -59,18 +100,43 @@
 				</select>
 			</label>
 
-			<div class="form-control w-full max-w-xs label flex-col items-start">
-				<label class="label cursor-pointer w-full">
-					<span class="label-text">Multiple Choice Questions</span>
-					<input type="radio" name="radio-10" class="radio checked:bg-red-500" checked />
-				</label>
+			<label
+				for="multiple"
+				class="label cursor-pointer w-full form-control w-full max-w-xs label flex-col gap-4 items-start">
+				<div class="w-full flex items-center justify-between">
+					<span class="label-text">Any Questions</span>
+					<input
+						id="Any"
+						name="radio-10"
+						type="radio"
+						class="radio checked:bg-current"
+						on:change={() => (formInput.question_type = 'any')}
+						checked />
+				</div>
 
-				<label class="label cursor-pointer w-full">
+				<div class="w-full flex items-center justify-between">
+					<span class="label-text">Multiple Choice Questions</span>
+					<input
+						id="multiple"
+						name="radio-10"
+						type="radio"
+						class="radio checked:bg-current"
+						on:change={() => (formInput.question_type = 'multiple')} />
+				</div>
+
+				<div class="w-full flex items-center justify-between">
 					<span class="label-text">True/False Questions</span>
-					<input type="radio" name="radio-10" class="radio checked:bg-blue-500" />
-				</label>
-			</div>
+					<input
+						on:change={() => (formInput.question_type = 'boolean')}
+						type="radio"
+						name="radio-10"
+						id="boolQuestions"
+						class="radio checked:bg-current" />
+				</div>
+			</label>
 		</section>
+
+		<div class="divider m-0" />
 
 		<input class="btn btn-primary" type="submit" value="Start Trivia" />
 	</form>
