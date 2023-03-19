@@ -17,7 +17,9 @@ export const POST = async ({ request }) => {
 		const trivia = await fetch(
 			`https://opentdb.com/api.php?amount=${questions}&category=${category}&difficulty=${difficulty}&type=${question_type}`
 		)
-		return json(await trivia.json())
+		const data = await trivia.json()
+		console.log(data)
+		return json(data)
 	} catch (error) {
 		return json(error)
 	}

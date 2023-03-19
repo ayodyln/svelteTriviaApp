@@ -1,30 +1,12 @@
 <script lang="ts">
-	import { getTrivia, requestTrivia } from '$lib/fetch/GetTrivia'
+	import { getTrivia } from '$lib/fetch/GetTrivia'
+	import { FormInput } from '$lib/types/TriviaForm'
+	import type { formInput } from '$lib/types/TriviaForm'
 
-	const formInput = {
-		// Default
-		questions: 10,
-		category: 'any',
-		difficulty: 'any',
-		question_type: 'any'
-	}
+	const formInput: formInput = new FormInput(10, 'any', 'any', 'any')
 
 	const FormHandler = async () => {
-		let data
-
-		console.log(formInput)
-
-		if (
-			formInput.questions === 10 &&
-			formInput.category === 'any' &&
-			formInput.difficulty === 'any' &&
-			formInput.question_type === 'any'
-		) {
-			data = await getTrivia()
-		} else {
-			data = await requestTrivia(formInput)
-		}
-
+		const data = await getTrivia(formInput)
 		console.log(data)
 	}
 </script>
@@ -47,6 +29,22 @@
 					id="questions"
 					class="input input-bordered w-full"
 					bind:value={formInput.questions} />
+			</label>
+
+			<label for="difficulty" class="form-control w-full max-w-xs label flex-col items-start">
+				<span class="label-text">Difficulty</span>
+
+				<select
+					bind:value={formInput.difficulty}
+					id="difficulty"
+					name="difficutly"
+					class:input-error={false}
+					class="select select-bordered w-full ">
+					<option value="any">Any Difficulty</option>
+					<option value="easy">Easy</option>
+					<option value="medium">Medium</option>
+					<option value="hard">Hard</option>
+				</select>
 			</label>
 
 			<label for="categories" class="form-control w-full max-w-xs label flex-col items-start">
@@ -82,21 +80,6 @@
 					<option value="30">Science: Gadgets</option>
 					<option value="31">Entertainment: Japanese Anime &amp; Manga</option>
 					<option value="32">Entertainment: Cartoon &amp; Animations</option>
-				</select>
-			</label>
-
-			<label for="difficulty" class="form-control w-full max-w-xs label flex-col items-start">
-				<span class="label-text">Difficulty</span>
-
-				<select
-					bind:value={formInput.difficulty}
-					id="difficulty"
-					name="difficutly"
-					class="select select-bordered w-full ">
-					<option value="any">Any Difficulty</option>
-					<option value="easy">Easy</option>
-					<option value="medium">Medium</option>
-					<option value="hard">Hard</option>
 				</select>
 			</label>
 
