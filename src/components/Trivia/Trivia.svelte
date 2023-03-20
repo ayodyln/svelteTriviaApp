@@ -2,7 +2,7 @@
 	import { shuffle } from 'underscore'
 	export let trivia: any, triviaHandler
 
-	const Quiz = trivia.map((q: any, i: number) => {
+	$: Quiz = trivia.map((q: any, i: number) => {
 		return {
 			id: i,
 			category: q.category,
@@ -30,7 +30,7 @@
 
 		if (btn === 'submit') {
 			let score = 0
-			const results = Quiz.map((q: any, i: number) => {
+			const results = Quiz.map((q: any) => {
 				if (q.correct_answer === q.user_input) score++
 				return {
 					id: q.id,
@@ -42,6 +42,21 @@
 			console.log(results, score)
 		}
 	}
+
+	// For some odd reason, Svelte native class toggling solutions were working.
+	// So, I had to resort to JS and to blend it with Sveltes condition UI rendering solutions.
+	const uiFeedbackHandler = (index: any) =>
+		document.querySelectorAll(`#question`).forEach((node) => {
+			if (node.dataset.id * 1 === index) {
+				node.classList.add('bg-base-200')
+				node.classList.remove('bg-base-100')
+				node.classList.add('ring')
+			} else {
+				node.classList.remove('bg-base-200')
+				node.classList.add('bg-base-100')
+				node.classList.remove('ring')
+			}
+		})
 </script>
 
 <div class="flex justify-between bg-base-200 p-2">
@@ -52,28 +67,34 @@
 	{#each Quiz as q, i}
 		{#if questionCount === i}
 			<section class="flex justify-between gap-10 mb-4">
-				<h3>{@html q.prompt}</h3>
+				<h3 class="font-bold">{@html q.prompt}</h3>
 				<p>#{q.id + 1}</p>
 			</section>
 
-			<section>
+			<section id="questions" class="flex flex-wrap w-full gap-[12px] m-auto">
 				{#if q.answers}
-					{#each q.answers as a}
-						<div class="form-control">
-							<label class="label cursor-pointer">
-								<span class="label-text">{@html a}</span>
-								<input
-									type="radio"
-									name="radio-10"
-									class="radio checked:bg-accent"
-									value={a}
-									checked={q.user_input === a ? true : false}
-									on:click={() => {
-										const question = Quiz.find((question) => question.id === i)
-										question.user_input = a
-									}} />
-							</label>
-						</div>
+					{#each q.answers as a, index}
+						<label
+							data-id={index}
+							id="question"
+							class:bg-base-200={q.user_input === a ? true : false}
+							class:bg-base-100={q.user_input === a ? false : true}
+							class:ring={q.user_input === a ? true : false}
+							class="label cursor-pointer w-[49%] text-base-content font-bold p-4 h-24 bg-base-100 hover:ring hover:ring-1 rounded-xl">
+							<span class="label-text">{@html a}</span>
+							<input
+								type="radio"
+								name="radio-10"
+								id="answer-{index}"
+								class="hidden"
+								value={a}
+								checked={q.user_input === a ? true : false}
+								on:click={() => {
+									const question = Quiz.find((question) => question.id === i)
+									question.user_input = a
+									uiFeedbackHandler(index)
+								}} />
+						</label>
 					{/each}
 				{/if}
 			</section>

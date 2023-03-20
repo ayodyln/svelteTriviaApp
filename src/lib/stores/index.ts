@@ -3,6 +3,7 @@ import { writable } from 'svelte/store'
 
 const initVal = {
 	trivia: [],
+	state: false,
 	results: {
 		total: 0,
 		correct: 0

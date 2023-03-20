@@ -2,7 +2,7 @@
 	import Trivia from '../components/Trivia/Trivia.svelte'
 	import TriviaForm from '../components/TriviaForm/TriviaForm.svelte'
 
-	let triviaState = false,
+	let triviaState: boolean | string = false,
 		trivia: any
 
 	const triviaHandler = (questions?: any) => {
@@ -21,6 +21,8 @@
 			class="max-w-2xl max-h-[32rem] w-full h-full rounded-xl bg-base-300 shadow-lg overflow-hidden flex flex-col justify-center">
 			{#if triviaState}
 				<Trivia {trivia} {triviaHandler} />
+			{:else if triviaState === 'results'}
+				<p>oof</p>
 			{:else}
 				<TriviaForm {triviaHandler} />
 			{/if}
