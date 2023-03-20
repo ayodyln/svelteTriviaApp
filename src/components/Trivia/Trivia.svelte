@@ -9,7 +9,7 @@
 			prompt: q.question,
 			correct_answer: q.correct_answer,
 			answers: shuffle([q.correct_answer, ...q.incorrect_answers]),
-			user_input: ''
+			user_input: null
 		}
 	})
 
@@ -26,6 +26,10 @@
 		if (btn === 'prev') {
 			if (questionCount <= 0) return
 			questionCount--
+		}
+
+		if (btn === 'submit') {
+			console.log(Quiz)
 		}
 	}
 </script>
@@ -53,8 +57,10 @@
 									name="radio-10"
 									class="radio checked:bg-accent"
 									value={a}
+									checked={q.user_input === a ? true : false}
 									on:click={() => {
-										console.log(a)
+										const question = Quiz.find((question) => question.id === i)
+										question.user_input = a
 									}} />
 							</label>
 						</div>
