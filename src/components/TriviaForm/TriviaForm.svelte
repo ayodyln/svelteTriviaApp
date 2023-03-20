@@ -3,7 +3,8 @@
 	import { FormInput } from '$lib/types/TriviaForm'
 	import type { formInput } from '$lib/types/TriviaForm'
 
-	export let trivia
+	export let triviaHandler: any
+
 	let difficultyInput: any,
 		categoryInput,
 		error: boolean | number = false,
@@ -24,15 +25,16 @@
 			)
 
 			error = data.response_code
+			loading = false
+
 			return
 		}
 		loading = false
-		trivia = [...data.results]
-		console.log(trivia)
+		triviaHandler(data.results)
 	}
 </script>
 
-<div class="h-full flex flex-col">
+<div class="h-full flex flex-col p-4">
 	<!-- Trivia Fetch Input -->
 	<h2 class="text-2xl font-bold">Pick your Trivia</h2>
 	<div class="divider m-0" />

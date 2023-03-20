@@ -2,19 +2,27 @@
 	import Trivia from '../components/Trivia/Trivia.svelte'
 	import TriviaForm from '../components/TriviaForm/TriviaForm.svelte'
 
-	let triviaState = false
-	let trivia: { response_code: number; result: [] }
+	let triviaState = false,
+		trivia: any
+
+	const triviaHandler = (questions?: any) => {
+		if (questions) {
+			trivia = [...questions]
+		}
+		triviaState = !triviaState
+	}
 </script>
 
 <main class="m-auto h-screen w-screen flex flex-col p-4 antialiased">
 	<h1 class="text-4xl font-bold">SvelteTrivia</h1>
 
 	<section id="trivia" class="w-full h-full flex justify-center items-center">
-		<div class="max-w-2xl max-h-[32rem] w-full h-full rounded-xl bg-base-300 shadow-lg p-4">
+		<div
+			class="max-w-2xl max-h-[32rem] w-full h-full rounded-xl bg-base-300 shadow-lg overflow-hidden flex flex-col justify-center">
 			{#if triviaState}
-				<Trivia />
+				<Trivia {trivia} {triviaHandler} />
 			{:else}
-				<TriviaForm {trivia} />
+				<TriviaForm {triviaHandler} />
 			{/if}
 		</div>
 	</section>
