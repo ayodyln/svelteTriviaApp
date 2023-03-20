@@ -29,7 +29,17 @@
 		}
 
 		if (btn === 'submit') {
-			console.log(Quiz)
+			let score = 0
+			const results = Quiz.map((q: any, i: number) => {
+				if (q.correct_answer === q.user_input) score++
+				return {
+					id: q.id,
+					prompt: q.prompt,
+					correct: q.correct_answer === q.user_input ? true : false
+				}
+			})
+
+			console.log(results, score)
 		}
 	}
 </script>
