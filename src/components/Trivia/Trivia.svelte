@@ -37,7 +37,7 @@
 <div class="h-full p-4">
 	{#each Quiz as q, i}
 		{#if questionCount === i}
-			<section class="flex justify-between mb-4">
+			<section class="flex justify-between gap-10 mb-4">
 				<h3>{@html q.prompt}</h3>
 				<p>#{q.id + 1}</p>
 			</section>
@@ -65,8 +65,28 @@
 	{/each}
 </div>
 
-<div class="p-2 flex justify-end">
-	<button id="prev" class="btn btn-primary" on:click={quizBtnsHandler}>Prev</button>
-	<button id="next" class="btn btn-primary" on:click={quizBtnsHandler}>Next</button>
-	<button id="submit" class="btn btn-primary" on:click={quizBtnsHandler}>Submit</button>
+<div class="divider m-0" />
+
+<div class="p-2 flex gap-2 justify-end">
+	<div class="flex">
+		<button
+			id="prev"
+			class="btn btn-primary rounded-r-none"
+			class:btn-disabled={questionCount === 0 ? true : false}
+			on:click={quizBtnsHandler}>Prev</button>
+
+		<button
+			id="next"
+			class="btn btn-primary rounded-l-none"
+			class:btn-disabled={questionCount === 9 ? true : false}
+			on:click={quizBtnsHandler}>Next</button>
+	</div>
+
+	<div class="divider divider-horizontal m-0" />
+
+	<button
+		id="submit"
+		class="btn btn-primary"
+		class:btn-disabled={questionCount < 9 ? true : false}
+		on:click={quizBtnsHandler}>Submit</button>
 </div>
