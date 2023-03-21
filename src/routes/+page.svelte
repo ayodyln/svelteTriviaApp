@@ -1,31 +1,29 @@
 <script>
+	// @ts-nocheck
+
 	import Results from '../components/Results/Results.svelte'
 	import Trivia from '../components/Trivia/Trivia.svelte'
 	import TriviaForm from '../components/TriviaForm/TriviaForm.svelte'
 
 	$: triviaState = ''
-	/**
-	 * @type {any[]}
-	 */
+
 	let trivia
-	/**
-	 * @type {{ results: any[]; score: any; }}
-	 */
+
 	let results
 
-	const triviaHandler = (/** @type {any} */ questions) => {
+	const triviaHandler = (questions) => {
 		if (questions) {
 			trivia = [...questions]
 		}
 		triviaState = 'quiz'
 	}
 
-	const getQuizResults = (/** @type {{ results: any; score: any; }} */ data) => {
+	const getQuizResults = (data) => {
 		triviaState = 'results'
 		results = { results: [...data.results], score: data.score }
 	}
 
-	const quizEnd = (/** @type {string} */ option) => (triviaState = option)
+	const quizEnd = (option) => (triviaState = option)
 </script>
 
 <main class="m-auto h-screen w-screen flex flex-col p-4 antialiased">

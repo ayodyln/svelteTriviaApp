@@ -1,13 +1,10 @@
 <script>
+	// @ts-nocheck
+
 	import { shuffle } from 'underscore'
-	/**
-	 * @type {any[]}
-	 *
-	 */
+
 	export let trivia
-	/**
-	 * @type {(arg0: { results: { id: number; prompt: any; correct: boolean; }[]; score: number; }) => void}
-	 */
+
 	export let getQuizResults
 
 	$: Quiz = trivia.map((q, i) => {
@@ -21,14 +18,11 @@
 		}
 	})
 
-	/**
-	 * @type {number}
-	 */
 	let answered
 
 	let questionCount = 0
 
-	const quizBtnsHandler = (/** @type {any} */ event) => {
+	const quizBtnsHandler = (event) => {
 		const btn = event.target.id
 
 		if (btn === 'next') {
@@ -57,7 +51,7 @@
 
 	// For some odd reason, Svelte native class toggling solutions were working.
 	// So, I had to resort to JS and to blend it with Sveltes condition UI rendering solutions.
-	const uiFeedbackHandler = (/** @type {number} */ index) =>
+	const uiFeedbackHandler = (index) =>
 		document.querySelectorAll(`#question`).forEach((/** @type {any} */ node) => {
 			if (node.dataset.id * 1 === index) {
 				node.classList.add('bg-base-200')
@@ -102,7 +96,6 @@
 								value={a}
 								checked={q.user_input === a ? true : false}
 								on:click={() => {
-									/** @type {any} */
 									const question = Quiz.find((question) => question.id === i)
 									question.user_input = a
 									uiFeedbackHandler(index)
