@@ -1,8 +1,18 @@
-<script lang="ts">
-	import { shuffle } from 'underscore'
-	export let trivia: any, triviaHandler
+<script>
+	import { any, shuffle } from 'underscore'
+	/**
+	 * @type {any[]}
+	 *
+	 */
+	export let trivia
+	/** @type {any} */
+	export let triviaHandler
+	/**
+	 * @type {(arg0: { results: { id: number; prompt: any; correct: boolean; }[]; score: number; }) => void}
+	 */
+	export let getQuizResults
 
-	$: Quiz = trivia.map((q: any, i: number) => {
+	$: Quiz = trivia.map((q, i) => {
 		return {
 			id: i,
 			category: q.category,
@@ -13,9 +23,14 @@
 		}
 	})
 
+	/**
+	 * @type {number}
+	 */
+	let answered
+
 	let questionCount = 0
 
-	const quizBtnsHandler = (event: any) => {
+	const quizBtnsHandler = (/** @type {any} */ event) => {
 		const btn = event.target.id
 
 		if (btn === 'next') {
@@ -30,7 +45,7 @@
 
 		if (btn === 'submit') {
 			let score = 0
-			const results = Quiz.map((q: any) => {
+			const results = Quiz.map((q) => {
 				if (q.correct_answer === q.user_input) score++
 				return {
 					id: q.id,
@@ -38,15 +53,14 @@
 					correct: q.correct_answer === q.user_input ? true : false
 				}
 			})
-
-			console.log(results, score)
+			getQuizResults({ results, score })
 		}
 	}
 
 	// For some odd reason, Svelte native class toggling solutions were working.
 	// So, I had to resort to JS and to blend it with Sveltes condition UI rendering solutions.
-	const uiFeedbackHandler = (index: any) =>
-		document.querySelectorAll(`#question`).forEach((node) => {
+	const uiFeedbackHandler = (/** @type {number} */ index) =>
+		document.querySelectorAll(`#question`).forEach((/** @type {any} */ node) => {
 			if (node.dataset.id * 1 === index) {
 				node.classList.add('bg-base-200')
 				node.classList.remove('bg-base-100')
@@ -90,9 +104,14 @@
 								value={a}
 								checked={q.user_input === a ? true : false}
 								on:click={() => {
+									/** @type {any} */
 									const question = Quiz.find((question) => question.id === i)
 									question.user_input = a
 									uiFeedbackHandler(index)
+									answered = Quiz.map((q) => {
+										if (!q.user_input) return
+										return q.user_input
+									}).filter((a) => a).length
 								}} />
 						</label>
 					{/each}
@@ -124,6 +143,6 @@
 	<button
 		id="submit"
 		class="btn btn-primary"
-		class:btn-disabled={questionCount < 9 ? true : false}
+		class:btn-disabled={answered === 10 ? false : true}
 		on:click={quizBtnsHandler}>Submit</button>
 </div>

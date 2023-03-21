@@ -1,16 +1,31 @@
-<script lang="ts">
+<script>
+	import Results from '../components/Results/Results.svelte'
 	import Trivia from '../components/Trivia/Trivia.svelte'
 	import TriviaForm from '../components/TriviaForm/TriviaForm.svelte'
 
-	let triviaState: boolean | string = false,
-		trivia: any
+	$: triviaState = ''
+	/**
+	 * @type {any[]}
+	 */
+	let trivia
+	/**
+	 * @type {{ results: any[]; score: any; }}
+	 */
+	let results
 
-	const triviaHandler = (questions?: any) => {
+	const triviaHandler = (/** @type {any} */ questions) => {
 		if (questions) {
 			trivia = [...questions]
 		}
-		triviaState = !triviaState
+		triviaState = 'quiz'
 	}
+
+	const getQuizResults = (/** @type {{ results: any; score: any; }} */ data) => {
+		triviaState = 'results'
+		results = { results: [...data.results], score: data.score }
+	}
+
+	const quizEnd = (/** @type {string} */ option) => (triviaState = option)
 </script>
 
 <main class="m-auto h-screen w-screen flex flex-col p-4 antialiased">
@@ -19,10 +34,10 @@
 	<section id="trivia" class="w-full h-full flex justify-center items-center">
 		<div
 			class="max-w-2xl max-h-[32rem] w-full h-full rounded-xl bg-base-300 shadow-lg overflow-hidden flex flex-col justify-center">
-			{#if triviaState}
-				<Trivia {trivia} {triviaHandler} />
+			{#if triviaState === 'quiz'}
+				<Trivia {trivia} {triviaHandler} {getQuizResults} />
 			{:else if triviaState === 'results'}
-				<p>oof</p>
+				<Results {results} {quizEnd} />
 			{:else}
 				<TriviaForm {triviaHandler} />
 			{/if}
