@@ -44,3 +44,8 @@
 		</div>
 	</section>
 </main>
+
+<footer class="text-center p-4">
+	<a class="link" href="https://github.com/ayodyln/svelteTriviaApp" target="_blank"
+		>GitHub Code Repository</a>
+</footer>
