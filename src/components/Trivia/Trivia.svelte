@@ -1,12 +1,10 @@
 <script>
-	import { any, shuffle } from 'underscore'
+	import { shuffle } from 'underscore'
 	/**
 	 * @type {any[]}
 	 *
 	 */
 	export let trivia
-	/** @type {any} */
-	export let triviaHandler
 	/**
 	 * @type {(arg0: { results: { id: number; prompt: any; correct: boolean; }[]; score: number; }) => void}
 	 */
